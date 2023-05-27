@@ -40,18 +40,16 @@ export class CompanyService {
     // }
 
     const content = await page.content()
-    //
-    const $ = cherrio.load(content)
     const list = await page.$('#__next ul[data-cy="job-list"]')
 
-    const evalDate = await list.evaluate((element) => {
-      const aTag = $(element).find('li > div > a')
-      console.log(element.innerHTML)
-      // return aTag.attr('href')
-      return element.innerHTML
-    }, list)
+    const ele = await list.$$('li > div > a')
 
-    console.log(evalDate)
+    for (const e of ele) {
+      const a = await page.evaluate((e) => {
+        return e.getAttribute('href')
+      }, e)
+      console.log(a)
+    }
 
     return `This action returns all company`
   }
